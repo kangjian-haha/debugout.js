@@ -1,80 +1,80 @@
 debugout.js
 ===========
 
-(debug output) generates a text file from your logs that can be searched, timestamped, downloaded and more. [See some examples below](#outputting).
+(debug output) 会从您的日志中生成一个文本文件，可以对其进行搜索，添加时间戳，进行下载等。 [请参见下面的一些示例。](#outputting).
 
-Debugout's `log()` accepts any type of object including functions. Debugout is not a monkey patch, but a separate logging class altogether that you use instead of `console`.
+Debugout's `log()` 接受任何类型的对象，包括函数。 Debugout 不是一个猴子补丁，而是一个单独的日志记录类，您可以使用它来代替 `console`.
 
-Some highlights of debugout:
+debugout 的一些要点:
 
-- get the entire log, or the tail at run-time or any time
-- search and slice the log
-- better understand usage patterns with optional timestamps
-- toggle live logging (console.log) in one place
-- optionally store the output in `window.localStorage` and continuously add to the same log each session
-- optionally cap the log to X most recent lines to limit memory consumption
+- 获取整个日志，或者在运行时或任何时间获取日志的最后几行
+- 搜索并切片日志
+- 通过可选的时间戳更好地了解使用模式
+- 在一处切换实时日志记录（console.log）
+- （可选）将输出存储在其中，window.localStorage并在每个会话中连续添加到同一日志中
+- （可选）将日志限制为最近的X行以限制内存消耗
 
 ## [Try the demo](http://inorganik.github.io/debugout.js/)
 
-### Installation
+### 安装
 
-Simply include the debugout.js file in your project or install via a package manager:
+只需将debugout.js文件包括在您的项目中，或通过包管理器进行安装：
 
 npm: `npm install debugout.js`
 
 bower: `bower install debugout.js`
 
-### Usage
+### 用法
 
-Create a new debugout object in the global namespace, at the top of your script, and replace all your console log methods with debugout's log method:
+在脚本顶部的全局名称空间中创建一个新的debugout对象，并将所有控制台日志方法替换为debugout的log方法：
 
 ```js
 var bugout = new debugout();
 
-// instead of console.log('some object or string')
+// 代替 console.log('some object or string')
 bugout.log('some object or string');
 ```
-Whatever you log is saved and added to the log file on a new line.
+无论您记录什么，都将保存并在新行中将其添加到日志文件中。
 
-### Methods
+### 方法
 
-- `log()` - like `console.log()`, but saved!
-- `getLog()` - returns the entire log.
-- `tail(numLines)` - returns the last X lines of the log, where X is the number you pass. Defaults to 100.
-- `search(string)` - returns numbered lines where there were matches for your search. Pass a string.
-- `getSlice(start, numLines)` - get a 'slice' of the log. Pass the starting line and how many lines after it you want
-- `downloadLog()` - downloads a .txt file of the log. [See example below](#outputting).
-- `clear()` - clears the log.
-- `determineType()` - a more granular version of `typeof` for your convenience
+- `log()` - 像 `console.log()` 一样, 但已保存!
+- `getLog()` - 返回整个日志。
+- `tail(numLines)` - 返回日志的最后X行，其中X是您传递的数字。默认为100。
+- `search(string)` - 返回编号行，其中找到与您的搜索相匹配的行。传递一个字符串。
+- `getSlice(start, numLines)` - 获取日志的“切片”。传递起始线以及您想要的后几行
+- `downloadLog()` - 下载日志的.txt文件。 [请参见下面的示例](#outputting).
+- `clear()` - 清除日志。
+- `determineType()` - 为你提供更方便的 `typeof` 方法
 
-### Options <a name="options"></a>
+### 选项 <a name="options"></a>
 
-In the debugout function definition, you can edit options:
+在 debugout 的定义中, 您可以编辑选项：
 
 ```js
-// log in real time (forwards to console.log)
+// 实时打印 (转发到console.log)
 self.realTimeLoggingOn = true; 
-// insert a timestamp in front of each log
+// 在每个日志的前面插入一个时间戳
 self.useTimestamps = false; 
-// store the output using window.localStorage() and continuously add to the same log each session
+// 使用window.localStorage()存储输出，并在每次会话中不断添加到相同的日志中
 self.useLocalStorage = false; 
-// set to false after you're done debugging to avoid the log eating up memory
+// 在完成调试后设置为false，以避免日志占用内存
 self.recordLogs = true; 
-// to avoid the log eating up potentially endless memory
+// 避免日志可能耗尽无限的内存
 self.autoTrim = true; 
-// if autoTrim is true, this many most recent lines are saved
+// 如果autoTrim为true，那么将保存这最多最近的行
 self.maxLines = 2500; 
-// how many lines tail() will retrieve
+// tail()将检索多少行
 self.tailNumLines = 100; 
-// filename of log downloaded with downloadLog()
+// 调用downloadLog()方法后, 下载日志的文件名
 self.logFilename = 'log.txt';
-// max recursion depth for logged objects
+// 日志对象的最大递归深度
 self.maxDepth = 25;
 ```
 
-### Outputting examples <a name="outputting"></a>
+### 输出示例 <a name="outputting"></a>
 
-Here are a couple examples of what you can do with the log. Each example assumes that you have established a `debugout` object and are logging with it:
+这是您可以使用该日志的几个示例。每个示例均假定您已建立`debugout`对象并使用该对象进行记录：
 
 ```js
 var bugout = new debugout();
@@ -83,17 +83,17 @@ bugout.log(somethingElse);
 bugout.log('etc');
 ```
 
-##### Example #1: Button that downloads the log as a .txt file
+##### 示例1：将日志下载为.txt文件的按钮
 
-Simply call debugout's `downloadLog()` method. You can change the filename by editing `self.logFilename`.
+只需调用`debugout`的`downloadLog()`方法。您可以通过编辑更改文件名`self.logFilename`。
 
 ```html
 <input type="button" value="Download log" onClick="bugout.downloadLog()">
 ````
 
-##### Example #2: PhoneGap app that attaches the log to an email
+##### 示例2：将日志附加到电子邮件的PhoneGap应用
 
-Example shown uses the [Email Composer plugin](https://github.com/inorganik/cordova-emailComposerWithAttachments) and also requires the File plugin: `cordova plugin add org.apache.cordova.file`.
+所示示例使用 [Email Composer插件](https://github.com/inorganik/cordova-emailComposerWithAttachments) 还需要File插件: `cordova plugin add org.apache.cordova.file`.
 
 ```js
 function sendLog() {
@@ -122,12 +122,12 @@ function fileSystemError(error) {
     bugout.log('Error getting file system: '+error.code);
 }
 ```
-### And more...
+### 更多...
 
-- Post the log to your server via an ajax request if an error or some other event occurs.
-- Allow the user to download a copy of a submitted form.
-- Generate a receipt for the user to download.
-- Record survey answers and know how long each question took the user to answer.
+- 如果发生错误或其他事件，通过ajax请求将日志发送到服务器。
+- 允许用户下载提交的表单的副本。
+- 生成收据供用户下载。
+- 记录调查答案，知道用户回答每个问题花了多长时间。
 
 
 
